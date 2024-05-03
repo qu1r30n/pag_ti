@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejemplo de Prompt con Números</title>
+</head>
+<body>
+  
+<input type="text" id="textInput" placeholder="Ingrese texto y presione Enter">
+<button onclick="mostrarDatos()">Mostrar Datos</button>
+<button onclick="borrarCookies()">Borrar Cookies</button>
+<div id="datosContainer" style="display: none;"></div>
+<a href="#" onclick="copiarContenido()">Copiar contenido</a>
+
+<script>
+  const textInput = document.getElementById('textInput');
+
+  textInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      
+      mostrarPrompt();
+      
+      textInput.value = '';
+      textInput.focus();
+    }
+  });
+  
+  function mostrarPrompt() 
+  {
+    const userInput = prompt('Ingrese un número:');
+    const num = parseFloat(userInput);
+
+    if (!isNaN(num) && userInput.trim() !== '' && !isNaN(userInput.trim())) 
+    {
+      // Concatenar texto y número en una sola cadena y establecerla como el valor de la cookie
+      guardar_cookie(textInput.value, userInput);
+      alert('¡Excelente! Has ingresado el número: ' + userInput + '\nValor del campo de texto: ' + textInput.value);
+    } 
+    else 
+    {
+      alert('Por favor, ingrese un número válido.');
+      mostrarPrompt();
+    }
+  }
+  
+  
+  function guardar_cookie(texto, numero) 
+  {
+    // Concatenar texto y número en una sola cadena y establecerla como el valor de la cookie
+    var horaActual = new Date().toLocaleTimeString('es-ES', {hour12: false}).replace(/:/g, '');
+    if (document.cookie==="") 
+    {
+        document.cookie = `datos=${texto}|nombre_producto|${numero}|`+horaActual+`<br>`;   
+    }
+    else
+    {
+        const cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)datos\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        document.cookie = `datos=`+cookieValue+`${texto}|nombre_producto|${numero}|`+horaActual+`<br>;`;
+
+    }
+    
+  }
+
+
+  function mostrarDatos() 
+  {
+      const datosContainer = document.getElementById('datosContainer');
+      // Obtener el valor de la cookie y mostrarlo
+      const cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)datos\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      datosContainer.innerHTML = cookieValue;
+      datosContainer.style.display = 'block';
+  }
+
+  function borrarCookies() 
+  {
+    document.cookie.split(';').forEach(cookie => 
+    {
+      const [key, _] = cookie.split('=');
+      document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
+    alert('Cookies borradas correctamente.');
+    document.getElementById('datosContainer').style.display = 'none';
+  }
+
+  function copiarContenido() {
+    var contenidoDiv = document.getElementById('datosContainer');
+    var rangoSeleccion = document.createRange();
+    rangoSeleccion.selectNode(contenidoDiv);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(rangoSeleccion);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    alert('Contenido copiado al portapapeles.');
+}
+</script>
+</body>
+</html>
