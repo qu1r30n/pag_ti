@@ -1,152 +1,223 @@
-const productList = document.getElementById('product-list');
+const listaDeProductos = document.getElementById('listaDeProductos');
 
-let products=[];
-const products_a_mover = [
-  { id: 1, name: 'Product 1', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 2, name: 'Product 2', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 3, name: 'Product 3', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 4, name: 'Product 4', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 5, name: 'Product 5', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 6, name: 'Product 6', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 7, name: 'Product 7', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 8, name: 'Product 8', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 9, name: 'Product 9', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 10, name: 'Product 10', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 11, name: 'Product 11', image: 'https://via.placeholder.com/150', quantity: 0 },
-  { id: 12, name: 'Product 12', image: 'https://via.placeholder.com/150', quantity: 0 }
+let productos = [];
+const productos_a_mover = [
+  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
+  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
+  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
+  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
+  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
+  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
+  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
+  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
+  // Agrega más productos con sus precios y extras aquí
 ];
 
 document.addEventListener("DOMContentLoaded", function() 
 {
-  for (let i = 0; i < products_a_mover.length; i++) 
+  for (let i = 0; i < productos_a_mover.length; i++) 
   {
-    // Llamar a la función con los datos proporcionados
-    agregarProducto(products_a_mover[i].id +"|"+products_a_mover[i].name+"|"+products_a_mover[i].image+"|"+products_a_mover[i].quantity);
-
+    agregarProducto(productos_a_mover[i].id +"|"+productos_a_mover[i].nombre+"|"+productos_a_mover[i].imagen+"|"+productos_a_mover[i].cantidad+"|"+productos_a_mover[i].precio+"|"+productos_a_mover[i].extra);
   }  
-  
-  
-
-  renderProducts(products);
+  renderizarProductos(productos);
 });
 
-function updateQuantity(productId, amount) 
+function actualizarCantidad(idProducto, cantidad) 
 {
-  const product = findProductById(products, productId);
-  if (product) 
+  const producto = buscarProductoPorId(productos, idProducto);
+  if (producto) 
   {
-    product.quantity += amount;
-    clearProductList();
+    producto.cantidad += cantidad;
+    limpiarListaDeProductos();
     fila = document.createElement('div');
-    renderProducts(products);
+    renderizarProductos(productos);
   }
 }
 
-function findProductById(products, productId) 
+function buscarProductoPorId(productos, idProducto) 
 {
-  for (let i = 0; i < products.length; i++) 
+  for (let i = 0; i < productos.length; i++) 
   {
-    if (products[i].id === productId) 
+    if (productos[i].id === idProducto) 
     {
-      return products[i];
+      return productos[i];
     }
   }
   return null; // Devolver null si el producto no se encuentra
 }
 
-function clearProductList() 
+function limpiarListaDeProductos() 
 {
-  // Elimina todos los hijos del elemento productList
-  while (productList.firstChild) 
+  while (listaDeProductos.firstChild) 
   {
-    productList.removeChild(productList.firstChild);
+    listaDeProductos.removeChild(listaDeProductos.firstChild);
   }
+  fila=null
+  fila = document.createElement('div');
+
 }
 
-function renderProducts(products) 
+function renderizarProductos(productos) 
 {
-  productList.innerHTML = '';
-  j=0;
-  for (let i = 0; i < products.length; i++) 
+  listaDeProductos.innerHTML = '';
+  j = 0;
+  for (let i = 0; i < productos.length; i++) 
   {
-    const { id, name, image, quantity } = products[i];
-    
-    if (j>3) 
+    const { id, nombre, imagen, cantidad, precio, extra } = productos[i];
+    if (j > 3) 
     {
-      renderProduct(id, name, image, quantity,true);
-      j=0;
+      renderizarProducto(id, nombre, imagen, cantidad, precio, extra, true);
+      j = 0;
     } 
     else 
     {
-      renderProduct(id, name, image, quantity,false);
+      renderizarProducto(id, nombre, imagen, cantidad, precio, extra, false);
     }
-    j++
+    j++;
   }
 }
 
 let fila = document.createElement('div');
-function renderProduct(id, name, image, quantity,hacer_nuevo_div=false) 
+function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, hacerNuevoDiv = false) 
 {
-  fila.style.display = 'flex'; // Cambiar a flexbox para alinear elementos en horizontal
-  if (hacer_nuevo_div) 
+  fila.style.display = 'flex';
+  if (hacerNuevoDiv) 
   {
     fila = document.createElement('div');
-    fila.style.display = 'flex'; // Cambiar a flexbox para alinear elementos en horizontal
+    fila.style.display = 'flex';
   }
   
-  const productDiv = document.createElement('div');
-  productDiv.classList.add('product');
-  
+  const productoDiv = document.createElement('div');
+  productoDiv.classList.add('producto');
 
   const img = document.createElement('img');
-  img.src = image;
-  productDiv.appendChild(img);
+  img.src = imagen;
+  productoDiv.appendChild(img);
 
-  const nameElement = document.createElement('p');
-  nameElement.textContent = name;
-  productDiv.appendChild(nameElement);
+  const nombreElemento = document.createElement('p');
+  nombreElemento.textContent = nombre;
+  productoDiv.appendChild(nombreElemento);
 
-  const quantityDiv = document.createElement('div');
-  quantityDiv.classList.add('quantity');
+  const precioElemento = document.createElement('p');
+  precioElemento.textContent = `Precio: $${precio.toFixed(2)}`;
+  productoDiv.appendChild(precioElemento);
 
-  const minusButton = document.createElement('button');
-  minusButton.textContent = '-';
-  minusButton.addEventListener('click', () => updateQuantity(id, -1));
-  quantityDiv.appendChild(minusButton);
 
-  const quantityInput = document.createElement('input');
-  quantityInput.type = 'text';
-  quantityInput.value = quantity;
-  quantityDiv.appendChild(quantityInput);
+  const botonMenos = document.createElement('button');
+  botonMenos.textContent = '-';
+  botonMenos.addEventListener('click', () => actualizarCantidad(id, -1));
+  productoDiv.appendChild(botonMenos);
 
-  const plusButton = document.createElement('button');
-  plusButton.textContent = '+';
-  plusButton.addEventListener('click', () => updateQuantity(id, 1));
-  quantityDiv.appendChild(plusButton);
+  const inputCantidad = document.createElement('input');
+  inputCantidad.type = 'text';
+  inputCantidad.value = cantidad;
+  inputCantidad.addEventListener('input', (event) => {
+    const nuevaCantidad = parseInt(event.target.value);
+    const producto = buscarProductoPorId(productos, id);
+    if (!isNaN(nuevaCantidad) && producto) {
+      producto.cantidad = nuevaCantidad;
+    }
+  });
+  productoDiv.appendChild(inputCantidad);
 
-  productDiv.appendChild(quantityDiv);
-  fila.appendChild(productDiv);
-  productList.appendChild(fila);
+  const botonMas = document.createElement('button');
+  botonMas.textContent = '+';
+  botonMas.addEventListener('click', () => actualizarCantidad(id, 1));
+  productoDiv.appendChild(botonMas);
+  
+  const inputextra = document.createElement('input');
+  inputextra.type = 'text';
+  inputextra.value = extra; // Asigna el valor de extra al campo de entrada
+  inputextra.addEventListener('input', (event) => {
+    const nuevoValorExtra = event.target.value;
+    const producto = buscarProductoPorId(productos, id);
+    if (producto) {
+      producto.extra = nuevoValorExtra; // Actualiza la propiedad extra del producto
+    }
+  });
+  productoDiv.appendChild(inputextra);
+
+  fila.appendChild(productoDiv);
+  listaDeProductos.appendChild(fila);
 }
 
 function agregarProducto(datos) 
 {
-  
-  // Dividir la cadena por el carácter '|'
   const datosSeparados = datos.split('|');
   
-  // Crear un objeto con los datos divididos
-  const nuevoProducto = 
-  {
+  const nuevoProducto = {
     id: parseInt(datosSeparados[0]),
-    name: datosSeparados[1],
-    image: datosSeparados[2],
-    quantity: parseInt(datosSeparados[3])
+    nombre: datosSeparados[1],
+    imagen: datosSeparados[2],
+    cantidad: parseInt(datosSeparados[3]),
+    precio: parseFloat(datosSeparados[4]),
+    extra: datosSeparados[5]
   };
-  
-  // Agregar el objeto al arreglo
-  products.push(nuevoProducto);
-  
-  // Aquí puedes hacer cualquier otra operación con el arreglo products si lo necesitas
-}
 
+  window.addEventListener('load', function() {
+    const botonProcesar = document.getElementById('procesar');
+  
+    // Verificar si se encontró el botón "procesar"
+    if (botonProcesar) 
+    {
+      // Escuchar el evento de clic en el botón "procesar"
+      botonProcesar.addEventListener('click', function() {
+        // Recopilar la información de los productos en el formato requerido
+        let textoPedido = '';
+        for (let i = 0; i < productos.length; i++) {
+          const { id, cantidad, extra } = productos[i];
+          if (cantidad>0) 
+          {
+            if (extra=="") 
+            {
+              textoPedido += `${id}:${cantidad}\n`;
+            } 
+            else 
+            {
+              textoPedido += `${id}:${cantidad}\next: ${extra}\n`;
+            }
+            
+          }
+          
+        }
+        // Mostrar el texto del pedido en el contenedor de contenido
+        document.getElementById('contenido').innerText = textoPedido;
+      });
+    } else {
+      console.error('El botón "procesar" no se encontró en el DOM.');
+    }
+  });
+
+  productos.push(nuevoProducto);
+}
+function copiarContenido() 
+  {
+    var contenidoDiv = document.getElementById('contenido');
+    var rangoSeleccion = document.createRange();
+    rangoSeleccion.selectNode(contenidoDiv);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(rangoSeleccion);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    alert('Contenido copiado al portapapeles.');
+  }
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    // Otro código de inicialización aquí...
+  
+    const buscarProducto = document.getElementById('buscarProducto');
+  
+    buscarProducto.addEventListener('input', function(event) 
+    {
+      limpiarListaDeProductos()
+
+      const idBuscado = parseInt(event.target.value);
+      if (!isNaN(idBuscado)) {
+        const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
+        renderizarProductos(productosFiltrados);
+      } else 
+      {
+        renderizarProductos(productos);
+      }
+    });
+  });

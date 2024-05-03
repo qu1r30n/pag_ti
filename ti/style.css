@@ -13,12 +13,10 @@ body
   padding: 10px;
 }
 
-.product 
-{
-  
+.producto {
   border: 1px solid #ccc;
   margin-bottom: 20px;
-  width: 12%;
+  width: 230px; /* Ancho fijo de 200 píxeles */
   box-sizing: border-box;
 }
 
