@@ -2,14 +2,8 @@ const listaDeProductos = document.getElementById('listaDeProductos');
 
 let productos = [];
 const productos_a_mover = [
-  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
-  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
-  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
-  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
-  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
-  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
-  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "" },
-  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "" },
+  { id: 1, nombre: 'Producto 1', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 10, extra: "", total: 0 },
+  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "", total: 0 },
   // Agrega más productos con sus precios y extras aquí
 ];
 
@@ -28,9 +22,11 @@ function actualizarCantidad(idProducto, cantidad)
   if (producto) 
   {
     producto.cantidad += cantidad;
+    producto.total = producto.cantidad * producto.precio; // Actualizar el precio total del producto
     limpiarListaDeProductos();
     fila = document.createElement('div');
     renderizarProductos(productos);
+    actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
   }
 }
 
@@ -63,22 +59,22 @@ function renderizarProductos(productos)
   j = 0;
   for (let i = 0; i < productos.length; i++) 
   {
-    const { id, nombre, imagen, cantidad, precio, extra } = productos[i];
+    const { id, nombre, imagen, cantidad, precio, extra, total } = productos[i];
     if (j > 3) 
     {
-      renderizarProducto(id, nombre, imagen, cantidad, precio, extra, true);
+      renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, true);
       j = 0;
     } 
     else 
     {
-      renderizarProducto(id, nombre, imagen, cantidad, precio, extra, false);
+      renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, false);
     }
     j++;
   }
 }
 
 let fila = document.createElement('div');
-function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, hacerNuevoDiv = false) 
+function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, hacerNuevoDiv = false) 
 {
   fila.style.display = 'flex';
   if (hacerNuevoDiv) 
@@ -102,7 +98,6 @@ function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, hacerNu
   precioElemento.textContent = `Precio: $${precio.toFixed(2)}`;
   productoDiv.appendChild(precioElemento);
 
-
   const botonMenos = document.createElement('button');
   botonMenos.textContent = '-';
   botonMenos.addEventListener('click', () => actualizarCantidad(id, -1));
@@ -116,6 +111,8 @@ function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, hacerNu
     const producto = buscarProductoPorId(productos, id);
     if (!isNaN(nuevaCantidad) && producto) {
       producto.cantidad = nuevaCantidad;
+      producto.total = nuevaCantidad * precio; // Actualizar el precio total del producto
+      actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
     }
   });
   productoDiv.appendChild(inputCantidad);
@@ -137,6 +134,10 @@ function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, hacerNu
   });
   productoDiv.appendChild(inputextra);
 
+  const totalElemento = document.createElement('p');
+  totalElemento.textContent = `Total: $${total.toFixed(2)}`; // Mostrar el precio total del producto
+  productoDiv.appendChild(totalElemento);
+
   fila.appendChild(productoDiv);
   listaDeProductos.appendChild(fila);
 }
@@ -151,7 +152,8 @@ function agregarProducto(datos)
     imagen: datosSeparados[2],
     cantidad: parseInt(datosSeparados[3]),
     precio: parseFloat(datosSeparados[4]),
-    extra: datosSeparados[5]
+    extra: datosSeparados[5],
+    total: 0 // Inicializar el precio total en 0
   };
 
   window.addEventListener('load', function() {
@@ -164,24 +166,21 @@ function agregarProducto(datos)
       botonProcesar.addEventListener('click', function() {
         // Recopilar la información de los productos en el formato requerido
         let textoPedido = '';
+        let precioTotalPedido = 0; // Inicializar el precio total del pedido
         for (let i = 0; i < productos.length; i++) {
-          const { id, cantidad, extra } = productos[i];
-          if (cantidad>0) 
+          const { id, cantidad, extra, total } = productos[i];
+          if (cantidad > 0) 
           {
-            if (extra=="") 
-            {
-              textoPedido += `${id}:${cantidad}\n`;
-            } 
-            else 
-            {
-              textoPedido += `${id}:${cantidad}\next: ${extra}\n`;
+            textoPedido += `${id}:${cantidad}\n`;
+            if (extra) {
+              textoPedido += `extra: ${extra}\n`;
             }
-            
+            precioTotalPedido += total; // Sumar el precio total del producto al precio total del pedido
           }
-          
         }
-        // Mostrar el texto del pedido en el contenedor de contenido
+        // Mostrar el texto del pedido y el precio total en el contenedor de contenido
         document.getElementById('contenido').innerText = textoPedido;
+        document.getElementById('precioTotal').innerText = `Precio Total: $${precioTotalPedido.toFixed(2)}`;
       });
     } else {
       console.error('El botón "procesar" no se encontró en el DOM.');
@@ -190,34 +189,43 @@ function agregarProducto(datos)
 
   productos.push(nuevoProducto);
 }
-function copiarContenido() 
-  {
-    var contenidoDiv = document.getElementById('contenido');
-    var rangoSeleccion = document.createRange();
-    rangoSeleccion.selectNode(contenidoDiv);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(rangoSeleccion);
-    document.execCommand('copy');
-    window.getSelection().removeAllRanges();
-    alert('Contenido copiado al portapapeles.');
-  }
-  
-  document.addEventListener("DOMContentLoaded", function() {
-    // Otro código de inicialización aquí...
-  
-    const buscarProducto = document.getElementById('buscarProducto');
-  
-    buscarProducto.addEventListener('input', function(event) 
-    {
-      limpiarListaDeProductos()
 
-      const idBuscado = parseInt(event.target.value);
-      if (!isNaN(idBuscado)) {
-        const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
-        renderizarProductos(productosFiltrados);
-      } else 
-      {
-        renderizarProductos(productos);
-      }
-    });
+function copiarContenido() 
+{
+  var contenidoDiv = document.getElementById('contenido');
+  var rangoSeleccion = document.createRange();
+  rangoSeleccion.selectNode(contenidoDiv);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(rangoSeleccion);
+  document.execCommand('copy');
+  window.getSelection().removeAllRanges();
+  alert('Contenido copiado al portapapeles.');
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Otro código de inicialización aquí...
+
+  const buscarProducto = document.getElementById('buscarProducto');
+
+  buscarProducto.addEventListener('input', function(event) 
+  {
+    limpiarListaDeProductos()
+
+    const idBuscado = parseInt(event.target.value);
+    if (!isNaN(idBuscado)) {
+      const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
+      renderizarProductos(productosFiltrados);
+    } else 
+    {
+      renderizarProductos(productos);
+    }
   });
+});
+
+function actualizarPrecioTotal() {
+  let precioTotal = 0;
+  productos.forEach(producto => {
+    precioTotal += producto.total;
+  });
+  document.getElementById('precioTotal').innerText = `Precio Total: $${precioTotal.toFixed(2)}`;
+}
