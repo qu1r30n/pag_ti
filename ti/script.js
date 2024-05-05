@@ -253,6 +253,60 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+document.addEventListener("DOMContentLoaded", function() {
+  // Otro código de inicialización aquí...
+
+  const buscarProducto = document.getElementById('buscarProducto');
+  const buscarPorNombre = document.getElementById('buscarPorNombre');
+  const ingresarCantidad = document.getElementById('ingresarCantidad'); // Nuevo campo de entrada para ingresar el ID y la cantidad
+
+  buscarProducto.addEventListener('input', function(event) 
+  {
+    limpiarListaDeProductos()
+
+    const idBuscado = parseInt(event.target.value);
+    if (!isNaN(idBuscado)) {
+      const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
+      renderizarProductos(productosFiltrados);
+    } else 
+    {
+      renderizarProductos(productos);
+    }
+  });
+
+  buscarPorNombre.addEventListener('input', function(event) 
+  {
+    limpiarListaDeProductos();
+
+    const nombreBuscado = event.target.value.toLowerCase(); // Convertir el nombre buscado a minúsculas
+    const productosFiltrados = productos.filter(producto => producto.nombre.toLowerCase().includes(nombreBuscado));
+    renderizarProductos(productosFiltrados);
+  });
+
+  // Agregar evento al presionar la tecla "Enter" en el campo de ingresar cantidad
+  ingresarCantidad.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      const idProducto = parseInt(ingresarCantidad.value);
+      if (!isNaN(idProducto)) {
+        const productoEncontrado = buscarProductoPorId(productos, idProducto);
+        if (productoEncontrado) {
+          const nombreProducto = productoEncontrado.nombre;
+          const cantidadProducto = productoEncontrado.cantidad + 1; // Incrementar la cantidad
+          alert(`Producto: ${nombreProducto}, Cantidad: ${cantidadProducto}`);
+          actualizarCantidad(idProducto, 1); // Incrementar la cantidad del producto correspondiente
+          ingresarCantidad.value = ''; // Limpiar el campo de entrada después de incrementar la cantidad
+        } else {
+          alert('El producto no está en la lista.'); // Mensaje si el producto no está en la lista
+          ingresarCantidad.value = ''; // Limpiar el campo de entrada si el producto no está en la lista
+        }
+      }
+    }
+  });
+});
+
+
+
+
 function actualizarPrecioTotal() {
   let precioTotal = 0;
   productos.forEach(producto => {
