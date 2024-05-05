@@ -222,6 +222,37 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+  // Otro código de inicialización aquí...
+
+  const buscarProducto = document.getElementById('buscarProducto');
+  const buscarPorNombre = document.getElementById('buscarPorNombre'); // Nuevo campo de búsqueda por nombre
+
+  buscarProducto.addEventListener('input', function(event) 
+  {
+    limpiarListaDeProductos()
+
+    const idBuscado = parseInt(event.target.value);
+    if (!isNaN(idBuscado)) {
+      const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
+      renderizarProductos(productosFiltrados);
+    } else 
+    {
+      renderizarProductos(productos);
+    }
+  });
+
+  buscarPorNombre.addEventListener('input', function(event) 
+  {
+    limpiarListaDeProductos();
+
+    const nombreBuscado = event.target.value.toLowerCase(); // Convertir el nombre buscado a minúsculas
+    const productosFiltrados = productos.filter(producto => producto.nombre.toLowerCase().includes(nombreBuscado));
+    renderizarProductos(productosFiltrados);
+  });
+});
+
+
 function actualizarPrecioTotal() {
   let precioTotal = 0;
   productos.forEach(producto => {
