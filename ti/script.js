@@ -168,14 +168,17 @@ function agregarProducto(datos)
       botonProcesar.addEventListener('click', function() {
         // Recopilar la información de los productos en el formato requerido
         let textoPedido = '';
+        let textoDescripcion='';
         let precioTotalPedido = 0; // Inicializar el precio total del pedido
         for (let i = 0; i < productos.length; i++) {
-          const { id, cantidad, extra, total } = productos[i];
+          const { id,nombre, cantidad, extra, total } = productos[i];
           if (cantidad > 0) 
           {
             textoPedido += `${id}:${cantidad}\n`;
+            textoDescripcion += `${id}|${nombre}|${cantidad}|${total}\n`;
             if (extra) {
               textoPedido += `extra: ${extra}\n`;
+              textoDescripcion += `extra: ${extra}\n`;
             }
             precioTotalPedido += total; // Sumar el precio total del producto al precio total del pedido
           }
@@ -190,6 +193,7 @@ function agregarProducto(datos)
         
         // Mostrar el texto del pedido y el precio total en el contenedor de contenido
         document.getElementById('contenido').innerText = textoPedido;
+        document.getElementById('infoProducto').innerText = textoDescripcion;
         document.getElementById('precioTotal').innerText = `Precio Total: $${precioTotalPedido.toFixed(2)}`;
       });
     } else {
