@@ -305,10 +305,37 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
+//localisacion------------------------------------------------------------------------------------------------
+async function obtenerUbicacion() {
+  if (navigator.geolocation) {
+      try {
+          const position = await new Promise((resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(resolve, reject);
+          });
+          return `${position.coords.latitude}${position.coords.longitude}`;
+      } catch (error) {
+          console.error("Error al obtener la ubicación:", error);
+          throw error;
+      }
+  } else {
+      console.error("La geolocalización no es compatible en este navegador.");
+      throw new Error("La geolocalización no es compatible en este navegador.");
+  }
+}
+
+async function obtenerYMostrarUbicacion() {
+  try {
+      const ubicacion = await obtenerUbicacion();
+      document.getElementById("ubicacion").textContent = `${ubicacion}`;
+  } catch (error) {
+      document.getElementById("ubicacion").textContent = "Error al obtener la ubicación";
+  }
+}
+
+document.getElementById("obtenerUbicacionBtn").addEventListener("click", obtenerYMostrarUbicacion);
 
 
-
-
+//fin-localisacion------------------------------------------------------------------------------------------------
 function actualizarPrecioTotal() {
   let precioTotal = 0;
   productos.forEach(producto => {
