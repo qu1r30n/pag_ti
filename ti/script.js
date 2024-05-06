@@ -312,7 +312,7 @@ async function obtenerUbicacion() {
           const position = await new Promise((resolve, reject) => {
               navigator.geolocation.getCurrentPosition(resolve, reject);
           });
-          return `${position.coords.latitude}${position.coords.longitude}`;
+          return `${position.coords.latitude}, ${position.coords.longitude}`;
       } catch (error) {
           console.error("Error al obtener la ubicación:", error);
           throw error;
