@@ -180,6 +180,14 @@ function agregarProducto(datos)
             precioTotalPedido += total; // Sumar el precio total del producto al precio total del pedido
           }
         }
+        
+        var elementoUbicacion = document.getElementById("ubicacion");
+        var textoUbicacion = elementoUbicacion.textContent;
+        if (textoUbicacion!="") 
+        {
+          textoPedido=textoPedido+"ubi:"+textoUbicacion;
+        } 
+        
         // Mostrar el texto del pedido y el precio total en el contenedor de contenido
         document.getElementById('contenido').innerText = textoPedido;
         document.getElementById('precioTotal').innerText = `Precio Total: $${precioTotalPedido.toFixed(2)}`;
