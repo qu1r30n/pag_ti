@@ -1,5 +1,16 @@
 const productos_a_mover = [
-  { id: 1, nombre: 'Producto 1', imagen: 'https://i.ibb.co/pRRP12T/asfdjk.jpg', cantidad: 0, precio: 10, extra: "", total: 0 },
-  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "", total: 0 },
-  // Agrega más productos con sus precios y extras aquí
+  { id: 1, nombre: 'bisteses en pasilla', imagen: 'https://i.ibb.co/pRRP12T/asfdjk.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },
+  { id: 2, nombre: 'rollo de pollo', imagen: 'https://i.ibb.co/MM8BXcT/25.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },
+  { id: 3, nombre: 'club sanwich', imagen: 'https://i.ibb.co/BG1bq0m/24.jpg', cantidad: 0, precio: 60, extra: "", total: 0 },
+  { id: 4, nombre: 'chilaquiles', imagen: 'https://i.ibb.co/jrWc211/23.jpg', cantidad: 0, precio: 50, extra: "", total: 0 },
+  { id: 5, nombre: 'embueltos', imagen: 'https://i.ibb.co/4Yf7BwS/22.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },
+  { id: 6, nombre: 'pollo a la kentoky', imagen: 'https://i.ibb.co/Cn03cVB/21.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },
+  { id: 7, nombre: 'molletes', imagen: 'https://i.ibb.co/MGnB1dP/19.jpg', cantidad: 0, precio: 50, extra: "", total: 0 },
+  { id: 8, nombre: 'pechuga asada', imagen: 'https://i.ibb.co/YNVHtd5/18.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },
+  { id: 9, nombre: 'enmoladas', imagen: 'https://i.ibb.co/DMyPqNm/16.jpg', cantidad: 0, precio: 50, extra: "", total: 0 },
+  { id: 10, nombre: 'pozole verde', imagen: 'https://i.ibb.co/CJtC4YX/15.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },  
+  { id: 11, nombre: 'coctel de frutas', imagen: 'https://i.ibb.co/yBZXYng/13.jpg', cantidad: 0, precio: 50, extra: "", total: 0 },
+  { id: 12, nombre: 'pechuga rellena', imagen: 'https://i.ibb.co/tY5BBVm/10.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },
+  { id: 13, nombre: 'enchiladas suisas', imagen: 'https://i.ibb.co/1Zrjpdw/9.jpg', cantidad: 0, precio: 50, extra: "", total: 0 },
+  { id: 14, nombre: 'bistec a la mexicana', imagen: 'https://i.ibb.co/fx68w4x/8.jpg', cantidad: 0, precio: 75, extra: "", total: 0 },
 ];

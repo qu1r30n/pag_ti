@@ -17,12 +17,25 @@ function actualizarCantidad(idProducto, cantidad)
   const producto = buscarProductoPorId(productos, idProducto);
   if (producto) 
   {
-    producto.cantidad += cantidad;
-    producto.total = producto.cantidad * producto.precio; // Actualizar el precio total del producto
-    limpiarListaDeProductos();
-    fila = document.createElement('div');
-    renderizarProductos(productos);
-    actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
+    let es_mayor_a_cero=producto.cantidad+cantidad;
+    if (es_mayor_a_cero>=0) 
+    {
+      producto.cantidad += cantidad;
+      producto.total = producto.cantidad * producto.precio; // Actualizar el precio total del producto
+      limpiarListaDeProductos();
+      fila = document.createElement('div');
+      renderizarProductos(productos);
+      actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
+    }
+    else
+    {
+      producto.cantidad = 0;
+      producto.total = producto.cantidad * producto.precio; // Actualizar el precio total del producto
+      limpiarListaDeProductos();
+      fila = document.createElement('div');
+      renderizarProductos(productos);
+      actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
+    }
   }
 }
 
@@ -98,25 +111,38 @@ function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, 
 
   const botonMenos = document.createElement('button');
   botonMenos.textContent = '-';
+  botonMenos.style.height = '40px'; // Establecer la altura del botón
+  botonMenos.style.width = '80px'; // Establecer el ancho del botón
   botonMenos.addEventListener('click', () => actualizarCantidad(id, -1));
   productoDiv.appendChild(botonMenos);
 
   const inputCantidad = document.createElement('input');
-  inputCantidad.type = 'text';
+  inputCantidad.type = 'number';
   inputCantidad.value = cantidad;
   inputCantidad.addEventListener('input', (event) => {
     const nuevaCantidad = parseInt(event.target.value);
     const producto = buscarProductoPorId(productos, id);
-    if (!isNaN(nuevaCantidad) && producto) {
-      producto.cantidad = nuevaCantidad;
-      producto.total = nuevaCantidad * precio; // Actualizar el precio total del producto
-      actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
+    if (!isNaN(nuevaCantidad) && producto) 
+    {
+      let res=producto.cantidad+nuevaCantidad;
+      if (res>0) 
+      {
+        producto.cantidad = nuevaCantidad;
+        producto.total = nuevaCantidad * precio; // Actualizar el precio total del producto
+        actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
+      }
+      else
+      {
+
+      }
     }
   });
   productoDiv.appendChild(inputCantidad);
 
   const botonMas = document.createElement('button');
   botonMas.textContent = '+';
+  botonMas.style.height = '40px'; // Establecer la altura del botón
+  botonMas.style.width = '80px'; // Establecer el ancho del botón
   botonMas.addEventListener('click', () => actualizarCantidad(id, 1));
   productoDiv.appendChild(botonMas);
   
@@ -216,76 +242,22 @@ document.addEventListener("DOMContentLoaded", function() {
   // Otro código de inicialización aquí...
 
   const buscarProducto = document.getElementById('buscarProducto');
-
-  buscarProducto.addEventListener('input', function(event) 
-  {
-    limpiarListaDeProductos()
-
-    const idBuscado = parseInt(event.target.value);
-    if (!isNaN(idBuscado)) {
-      const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
-      renderizarProductos(productosFiltrados);
-    } else 
-    {
-      renderizarProductos(productos);
-    }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-  // Otro código de inicialización aquí...
-
-  const buscarProducto = document.getElementById('buscarProducto');
-  const buscarPorNombre = document.getElementById('buscarPorNombre'); // Nuevo campo de búsqueda por nombre
-
-  buscarProducto.addEventListener('input', function(event) 
-  {
-    limpiarListaDeProductos()
-
-    const idBuscado = parseInt(event.target.value);
-    if (!isNaN(idBuscado)) {
-      const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
-      renderizarProductos(productosFiltrados);
-    } else 
-    {
-      renderizarProductos(productos);
-    }
-  });
-
-  buscarPorNombre.addEventListener('input', function(event) 
-  {
-    limpiarListaDeProductos();
-
-    const nombreBuscado = event.target.value.toLowerCase(); // Convertir el nombre buscado a minúsculas
-    const productosFiltrados = productos.filter(producto => producto.nombre.toLowerCase().includes(nombreBuscado));
-    renderizarProductos(productosFiltrados);
-  });
-});
-
-
-document.addEventListener("DOMContentLoaded", function() {
-  // Otro código de inicialización aquí...
-
-  const buscarProducto = document.getElementById('buscarProducto');
   const buscarPorNombre = document.getElementById('buscarPorNombre');
   const ingresarCantidad = document.getElementById('ingresarCantidad'); // Nuevo campo de entrada para ingresar el ID y la cantidad
 
-  buscarProducto.addEventListener('input', function(event) 
-  {
+  buscarProducto.addEventListener('input', function(event) {
     limpiarListaDeProductos()
 
     const idBuscado = parseInt(event.target.value);
     if (!isNaN(idBuscado)) {
       const productosFiltrados = productos.filter(producto => producto.id === idBuscado);
       renderizarProductos(productosFiltrados);
-    } else 
-    {
+    } else {
       renderizarProductos(productos);
     }
   });
 
-  buscarPorNombre.addEventListener('input', function(event) 
-  {
+  buscarPorNombre.addEventListener('input', function(event) {
     limpiarListaDeProductos();
 
     const nombreBuscado = event.target.value.toLowerCase(); // Convertir el nombre buscado a minúsculas
@@ -313,6 +285,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
+
 //localisacion------------------------------------------------------------------------------------------------
 async function obtenerUbicacion() {
   if (navigator.geolocation) {
