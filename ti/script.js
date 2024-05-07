@@ -1,11 +1,7 @@
 const listaDeProductos = document.getElementById('listaDeProductos');
 
 let productos = [];
-const productos_a_mover = [
-  { id: 1, nombre: 'Producto 1', imagen: 'https://i.ibb.co/pRRP12T/asfdjk.jpg', cantidad: 0, precio: 10, extra: "", total: 0 },
-  { id: 2, nombre: 'Producto 2', imagen: 'https://via.placeholder.com/150', cantidad: 0, precio: 15, extra: "", total: 0 },
-  // Agrega más productos con sus precios y extras aquí
-];
+
 
 document.addEventListener("DOMContentLoaded", function() 
 {
@@ -185,8 +181,8 @@ function agregarProducto(datos)
         }
         
         var elementoUbicacion = document.getElementById("ubicacion");
-        var textoUbicacion = elementoUbicacion.textContent;
-        if (textoUbicacion!="") 
+        var textoUbicacion = elementoUbicacion.value;
+        if (textoUbicacion!="")
         {
           textoPedido=textoPedido+"ubi:"+textoUbicacion;
         } 
@@ -338,9 +334,9 @@ async function obtenerUbicacion() {
 async function obtenerYMostrarUbicacion() {
   try {
       const ubicacion = await obtenerUbicacion();
-      document.getElementById("ubicacion").textContent = `${ubicacion}`;
+      document.getElementById("ubicacion").value = `${ubicacion}`;
   } catch (error) {
-      document.getElementById("ubicacion").textContent = "Error al obtener la ubicación";
+      document.getElementById("ubicacion").value = "Error al obtener la ubicación";
   }
 }
 
