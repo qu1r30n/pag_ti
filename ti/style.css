@@ -26,6 +26,27 @@ body
   max-width: 100%;
 }
 
+#listaDeProductos img {
+  width: 150px;
+  height: 150px;
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease, z-index 0s 0.3s; /* z-index change delayed */
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+#listaDeProductos img.enlarged {
+  width: 400px;
+  height: 400px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Bring the image to the top */
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease, z-index 0s 0s; /* z-index change instant */
+}
+
+
 
 .quantity 
 {

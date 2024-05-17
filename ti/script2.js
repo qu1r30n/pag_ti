@@ -69,7 +69,7 @@ function renderizarProductos(productos)
   for (let i = 0; i < productos.length; i++) 
   {
     const { id, nombre, imagen, cantidad, precio, extra, total } = productos[i];
-    if (j > 3) 
+    if (j > 1) 
     {
       renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, true);
       j = 0;
@@ -83,22 +83,21 @@ function renderizarProductos(productos)
 }
 
 let fila = document.createElement('div');
-function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, hacerNuevoDiv = false) 
-{
+function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, hacerNuevoDiv = false) {
   fila.style.display = 'flex';
-  if (hacerNuevoDiv) 
-  {
-    fila = document.createElement('div');
-    fila.style.display = 'flex';
+  if (hacerNuevoDiv) {
+      fila = document.createElement('div');
+      fila.style.display = 'flex';
   }
-  
+
   const productoDiv = document.createElement('div');
   productoDiv.classList.add('producto');
 
   const img = document.createElement('img');
   img.src = imagen;
-  img.style.width = "150px";
-  img.style.height = "150px";
+  img.addEventListener('click', () => {
+      img.classList.toggle('enlarged');
+  });
   productoDiv.appendChild(img);
 
   const nombreElemento = document.createElement('p');
@@ -111,8 +110,8 @@ function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, 
 
   const botonMenos = document.createElement('button');
   botonMenos.textContent = '-';
-  botonMenos.style.height = '40px'; // Establecer la altura del botón
-  botonMenos.style.width = '80px'; // Establecer el ancho del botón
+  botonMenos.style.height = '40px';
+  botonMenos.style.width = '80px';
   botonMenos.addEventListener('click', () => actualizarCantidad(id, -1));
   productoDiv.appendChild(botonMenos);
 
@@ -120,51 +119,46 @@ function renderizarProducto(id, nombre, imagen, cantidad, precio, extra, total, 
   inputCantidad.type = 'number';
   inputCantidad.value = cantidad;
   inputCantidad.addEventListener('input', (event) => {
-    const nuevaCantidad = parseInt(event.target.value);
-    const producto = buscarProductoPorId(productos, id);
-    if (!isNaN(nuevaCantidad) && producto) 
-    {
-      let res=producto.cantidad+nuevaCantidad;
-      if (res>0) 
-      {
-        producto.cantidad = nuevaCantidad;
-        producto.total = nuevaCantidad * precio; // Actualizar el precio total del producto
-        actualizarPrecioTotal(); // Llamar a la función para actualizar el precio total
+      const nuevaCantidad = parseInt(event.target.value);
+      const producto = buscarProductoPorId(productos, id);
+      if (!isNaN(nuevaCantidad) && producto) {
+          let res = producto.cantidad + nuevaCantidad;
+          if (res > 0) {
+              producto.cantidad = nuevaCantidad;
+              producto.total = nuevaCantidad * precio;
+              actualizarPrecioTotal();
+          }
       }
-      else
-      {
-
-      }
-    }
   });
   productoDiv.appendChild(inputCantidad);
 
   const botonMas = document.createElement('button');
   botonMas.textContent = '+';
-  botonMas.style.height = '40px'; // Establecer la altura del botón
-  botonMas.style.width = '80px'; // Establecer el ancho del botón
+  botonMas.style.height = '40px';
+  botonMas.style.width = '80px';
   botonMas.addEventListener('click', () => actualizarCantidad(id, 1));
   productoDiv.appendChild(botonMas);
-  
+
   const inputextra = document.createElement('input');
   inputextra.type = 'text';
-  inputextra.value = extra; // Asigna el valor de extra al campo de entrada
+  inputextra.value = extra;
   inputextra.addEventListener('input', (event) => {
-    const nuevoValorExtra = event.target.value;
-    const producto = buscarProductoPorId(productos, id);
-    if (producto) {
-      producto.extra = nuevoValorExtra; // Actualiza la propiedad extra del producto
-    }
+      const nuevoValorExtra = event.target.value;
+      const producto = buscarProductoPorId(productos, id);
+      if (producto) {
+          producto.extra = nuevoValorExtra;
+      }
   });
   productoDiv.appendChild(inputextra);
 
   const totalElemento = document.createElement('p');
-  totalElemento.textContent = `Total: $${total.toFixed(2)}`; // Mostrar el precio total del producto
+  totalElemento.textContent = `Total: $${total.toFixed(2)}`;
   productoDiv.appendChild(totalElemento);
 
   fila.appendChild(productoDiv);
   listaDeProductos.appendChild(fila);
 }
+
 
 function agregarProducto(datos) 
 {
@@ -180,50 +174,40 @@ function agregarProducto(datos)
     total: 0 // Inicializar el precio total en 0
   };
 
-  window.addEventListener('load', function() {
-    const botonProcesar = document.getElementById('procesar');
-  
-    // Verificar si se encontró el botón "procesar"
-    if (botonProcesar) 
-    {
-      // Escuchar el evento de clic en el botón "procesar"
-      botonProcesar.addEventListener('click', function() {
-        // Recopilar la información de los productos en el formato requerido
-        let textoPedido = '';
-        let textoDescripcion='';
-        let precioTotalPedido = 0; // Inicializar el precio total del pedido
-        for (let i = 0; i < productos.length; i++) {
-          const { id,nombre, cantidad, extra, total } = productos[i];
-          if (cantidad > 0) 
-          {
-            textoPedido += `${id}:${cantidad}\n`;
-            textoDescripcion += `${id}|${nombre}|${cantidad}|${total}\n`;
-            if (extra) {
+  productos.push(nuevoProducto);
+}
+
+function procesarPedido() {
+  // Recopilar la información de los productos en el formato requerido
+  let textoPedido = '';
+  let textoDescripcion='';
+  let precioTotalPedido = 0; // Inicializar el precio total del pedido
+  for (let i = 0; i < productos.length; i++) 
+  {
+      const { id, nombre, cantidad, extra, total } = productos[i];
+      if (cantidad > 0) 
+      {
+          textoPedido += `${id}:${cantidad}\n`;
+          textoDescripcion += `${id}|${nombre}|${cantidad}|${total}\n`;
+          if (extra) {
               textoPedido += `extra: ${extra}\n`;
               textoDescripcion += `extra: ${extra}\n`;
-            }
-            precioTotalPedido += total; // Sumar el precio total del producto al precio total del pedido
           }
-        }
-        
-        var elementoUbicacion = document.getElementById("ubicacion");
-        var textoUbicacion = elementoUbicacion.value;
-        if (textoUbicacion!="")
-        {
-          textoPedido=textoPedido+"ubi:"+textoUbicacion;
-        } 
-        
-        // Mostrar el texto del pedido y el precio total en el contenedor de contenido
-        document.getElementById('contenido').innerText = textoPedido;
-        document.getElementById('infoProducto').innerText = textoDescripcion;
-        document.getElementById('precioTotal').innerText = `Precio Total: $${precioTotalPedido.toFixed(2)}`;
-      });
-    } else {
-      console.error('El botón "procesar" no se encontró en el DOM.');
-    }
-  });
-
-  productos.push(nuevoProducto);
+          precioTotalPedido += total; // Sumar el precio total del producto al precio total del pedido
+      }
+  }
+  
+  var elementoUbicacion = document.getElementById("ubicacion");
+  var textoUbicacion = elementoUbicacion.value;
+  if (textoUbicacion!="")
+  {
+      textoPedido=textoPedido+"ubi:"+textoUbicacion;
+  } 
+  
+  // Mostrar el texto del pedido y el precio total en el contenedor de contenido
+  document.getElementById('contenido').innerText = textoPedido;
+  document.getElementById('infoProducto').innerText = textoDescripcion;
+  document.getElementById('precioTotal').innerText = `Precio Total: $${precioTotalPedido.toFixed(2)}`;
 }
 
 function copiarContenido() 

@@ -1,29 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Quantity</title>
+  <title>EL GREMIO</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <button id="procesar">Procesar</button>
-  <a href="#" onclick="copiarContenido()">Copiar contenido</a>
-  <table>
-    <tr>
-      <td id="contenido">Contenido</td>
-      <td id="infoProducto">Información del Producto</td>
-    </tr>
-  </table>
-  <input type="text" id="buscarProducto" placeholder="Buscar por ID">
-  <input type="text" id="buscarPorNombre" placeholder="Buscar por nombre">
-  <button id="obtenerUbicacionBtn">Obtener Ubicacion</button>
-  <input type="text" id="ubicacion" placeholder="ubicacion">
-  <input type="text" id="ingresarCantidad" placeholder="Ingresar ID y presionar Enter para aumentar cantidad">
-
-  <p id="precioTotal">Precio Total: $0.00</p> <!-- Nuevo elemento para mostrar el precio total -->
-  <div id="listaDeProductos" class="container"></div>
-  <script src="productos.js"></script>
-  <script src="script.js"></script>
+  <header>
+    <h1>EL GREMIO</h1>
+  </header>
+  <section>
+    
+    <div class="search-bar">
+      <input type="text" id="buscarProducto" placeholder="Buscar por ID">
+      <input type="text" id="buscarPorNombre" placeholder="Buscar por nombre">
+      <button id="obtenerUbicacionBtn">Obtener Ubicación</button>
+      <input type="text" id="ubicacion" placeholder="Ubicación">
+      <input type="text" id="ingresarCantidad" placeholder="Ingresar ID y presionar Enter para aumentar cantidad">
+    </div>
+    <p id="precioTotal">Precio Total: $0.00</p>
+    
+    
+    
+    <table>
+      <tr>
+        <button onclick="procesarPedido(); copiarContenido()">Procesar</button>
+      </tr>
+      <tr>
+        
+        <td style="width: 250px;" id="contenido">Contenido</td>
+        <td style="width: 250px;" id="infoProducto">Información del Producto</td>
+      </tr>
+    </table>
+    
+    <div id="listaDeProductos" class="container"></div>
+    
+  </section>
+  <footer>
+    <p>&copy; 2024 EL GREMIO</p>
+  </footer>
+  <script src="productos.js?v=1"></script>
+  <script src="script2.js?v=1"></script>
 </body>
 </html>
